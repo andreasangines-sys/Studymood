@@ -1,0 +1,1795 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#8B6FC7">
+<title>StudyMood</title>
+
+<style>
+:root{
+    --purple:#8B6FC7;
+    --purple2:#A994D8;
+    --lavender:#EEE8FA;
+    --bg:#F8F6FC;
+    --card:#FFFFFF;
+    --text:#292433;
+    --muted:#888197;
+    --green:#77B79A;
+    --pink:#E9A8BD;
+    --yellow:#E7C875;
+    --red:#D77D7D;
+    --shadow:0 8px 25px rgba(67,48,100,.08);
+}
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    -webkit-tap-highlight-color:transparent;
+}
+
+body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    background:var(--bg);
+    color:var(--text);
+}
+
+button,input,textarea,select{
+    font:inherit;
+}
+
+button{
+    border:0;
+    cursor:pointer;
+}
+
+.app{
+    width:100%;
+    max-width:500px;
+    min-height:100vh;
+    margin:auto;
+    padding-bottom:90px;
+}
+
+/* HEADER */
+
+.header{
+    padding:22px 20px 12px;
+}
+
+.header-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.logo{
+    font-size:25px;
+    font-weight:800;
+    color:var(--purple);
+}
+
+.logo span{
+    color:#B49BDE;
+}
+
+.date{
+    font-size:12px;
+    color:var(--muted);
+    margin-top:4px;
+}
+
+.theme-btn{
+    width:42px;
+    height:42px;
+    border-radius:50%;
+    background:var(--lavender);
+    font-size:19px;
+}
+
+/* SCREENS */
+
+.screen{
+    display:none;
+    padding:0 18px;
+    animation:fade .2s ease;
+}
+
+.screen.active{
+    display:block;
+}
+
+@keyframes fade{
+    from{opacity:0;transform:translateY(5px)}
+    to{opacity:1;transform:translateY(0)}
+}
+
+h1{
+    font-size:25px;
+    margin:12px 0 5px;
+}
+
+h2{
+    font-size:18px;
+    margin-bottom:12px;
+}
+
+.subtitle{
+    color:var(--muted);
+    font-size:13px;
+    line-height:1.5;
+    margin-bottom:18px;
+}
+
+/* CARDS */
+
+.card{
+    background:var(--card);
+    border-radius:22px;
+    padding:19px;
+    margin-bottom:15px;
+    box-shadow:var(--shadow);
+}
+
+.gradient-card{
+    background:linear-gradient(135deg,#EEE7FA,#DDD1F2);
+}
+
+/* MOOD */
+
+.mood-title{
+    font-weight:700;
+    margin-bottom:15px;
+}
+
+.moods{
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:7px;
+}
+
+.mood{
+    background:rgba(255,255,255,.65);
+    border-radius:16px;
+    padding:10px 3px;
+    font-size:23px;
+}
+
+.mood small{
+    display:block;
+    font-size:8px;
+    color:var(--muted);
+    margin-top:4px;
+}
+
+.mood.selected{
+    background:var(--purple);
+    transform:scale(1.04);
+}
+
+/* AI */
+
+.ai-box{
+    display:none;
+    margin-top:15px;
+    padding:15px;
+    background:white;
+    border-radius:17px;
+    line-height:1.5;
+    font-size:13px;
+}
+
+.ai-box.show{
+    display:block;
+}
+
+.ai-title{
+    color:var(--purple);
+    font-weight:800;
+    margin-bottom:6px;
+}
+
+/* PROGRESS */
+
+.progress-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+}
+
+.percent{
+    color:var(--purple);
+    font-size:29px;
+    font-weight:800;
+}
+
+.progress-track{
+    width:100%;
+    height:9px;
+    background:#ECE8F2;
+    border-radius:20px;
+    overflow:hidden;
+    margin-top:10px;
+}
+
+.progress-fill{
+    width:0%;
+    height:100%;
+    background:var(--purple);
+    transition:.4s;
+}
+
+/* QUICK BUTTONS */
+
+.quick-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:10px;
+}
+
+.quick{
+    background:var(--lavender);
+    border-radius:18px;
+    padding:17px;
+    text-align:left;
+    color:var(--text);
+}
+
+.quick-icon{
+    font-size:24px;
+    display:block;
+    margin-bottom:7px;
+}
+
+.quick strong{
+    font-size:13px;
+}
+
+.quick small{
+    color:var(--muted);
+    font-size:10px;
+}
+
+/* TASKS */
+
+.add-row{
+    display:flex;
+    gap:8px;
+    margin-bottom:15px;
+}
+
+.input{
+    width:100%;
+    border:0;
+    outline:0;
+    background:var(--card);
+    border-radius:15px;
+    padding:14px;
+    color:var(--text);
+    box-shadow:var(--shadow);
+}
+
+.add{
+    width:52px;
+    flex-shrink:0;
+    border-radius:15px;
+    background:var(--purple);
+    color:white;
+    font-size:24px;
+}
+
+.task{
+    display:flex;
+    align-items:center;
+    gap:11px;
+    padding:14px;
+    margin-bottom:8px;
+    border-radius:16px;
+    background:var(--card);
+    box-shadow:var(--shadow);
+}
+
+.check{
+    width:23px;
+    height:23px;
+    border-radius:50%;
+    border:2px solid var(--purple2);
+    background:transparent;
+    color:white;
+    flex-shrink:0;
+}
+
+.task.done .check{
+    background:var(--green);
+    border-color:var(--green);
+}
+
+.task.done .task-text{
+    text-decoration:line-through;
+    color:var(--muted);
+}
+
+.task-text{
+    flex:1;
+    font-size:13px;
+}
+
+.delete{
+    background:none;
+    color:var(--red);
+    font-size:17px;
+}
+
+/* PLANNER */
+
+.plan-input{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+textarea{
+    resize:none;
+    min-height:90px;
+}
+
+.primary{
+    width:100%;
+    padding:14px;
+    background:var(--purple);
+    color:white;
+    border-radius:15px;
+    font-weight:700;
+}
+
+/* TIMER */
+
+.timer-card{
+    text-align:center;
+    padding:25px 15px;
+}
+
+.timer-circle{
+    width:230px;
+    height:230px;
+    margin:15px auto 22px;
+    border-radius:50%;
+    border:12px solid var(--lavender);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.timer-time{
+    font-size:47px;
+    font-weight:800;
+    color:var(--purple);
+}
+
+.timer-mode{
+    font-size:13px;
+    color:var(--muted);
+}
+
+.timer-buttons{
+    display:flex;
+    justify-content:center;
+    gap:8px;
+}
+
+.timer-start{
+    padding:14px 23px;
+    background:var(--purple);
+    color:white;
+    border-radius:15px;
+    font-weight:700;
+}
+
+.timer-reset{
+    width:48px;
+    background:var(--lavender);
+    color:var(--purple);
+    border-radius:15px;
+    font-size:20px;
+}
+
+/* STATS */
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:10px;
+}
+
+.stat{
+    background:var(--card);
+    border-radius:19px;
+    padding:19px;
+    text-align:center;
+    box-shadow:var(--shadow);
+}
+
+.stat-number{
+    font-size:28px;
+    font-weight:800;
+    color:var(--purple);
+}
+
+.stat-label{
+    color:var(--muted);
+    font-size:11px;
+    margin-top:3px;
+}
+
+/* CALENDAR */
+
+.calendar-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:15px;
+}
+
+.calendar-title{
+    font-weight:800;
+}
+
+.calendar-grid{
+    display:grid;
+    grid-template-columns:repeat(7,1fr);
+    gap:5px;
+    text-align:center;
+}
+
+.day-name{
+    font-size:9px;
+    color:var(--muted);
+    padding-bottom:5px;
+}
+
+.day{
+    padding:8px 2px;
+    border-radius:10px;
+    font-size:11px;
+}
+
+.day.today{
+    background:var(--purple);
+    color:white;
+    font-weight:800;
+}
+
+/* PROFILE */
+
+.profile-card{
+    text-align:center;
+}
+
+.avatar{
+    width:75px;
+    height:75px;
+    margin:auto;
+    border-radius:50%;
+    background:var(--lavender);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:38px;
+}
+
+.profile-name{
+    font-size:21px;
+    font-weight:800;
+    margin-top:10px;
+}
+
+.profile-input{
+    margin-top:12px;
+    display:flex;
+    gap:7px;
+}
+
+.profile-input input{
+    flex:1;
+}
+
+.save{
+    background:var(--purple);
+    color:white;
+    padding:0 15px;
+    border-radius:14px;
+}
+
+/* ACHIEVEMENTS */
+
+.achievement{
+    display:flex;
+    align-items:center;
+    gap:13px;
+    padding:13px;
+    border-radius:15px;
+    background:#FAF8FD;
+    margin-bottom:8px;
+}
+
+.badge{
+    font-size:27px;
+}
+
+.achievement strong{
+    font-size:13px;
+}
+
+.achievement small{
+    display:block;
+    color:var(--muted);
+    font-size:10px;
+}
+
+/* NAV */
+
+.bottom-nav{
+    position:fixed;
+    bottom:0;
+    left:50%;
+    transform:translateX(-50%);
+    width:100%;
+    max-width:500px;
+    height:75px;
+    background:rgba(255,255,255,.96);
+    backdrop-filter:blur(15px);
+    display:flex;
+    justify-content:space-around;
+    align-items:center;
+    border-top:1px solid #ECE8F2;
+    z-index:100;
+}
+
+.nav{
+    background:none;
+    color:var(--muted);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:4px;
+    font-size:9px;
+}
+
+.nav-icon{
+    font-size:21px;
+}
+
+.nav.active{
+    color:var(--purple);
+    font-weight:800;
+}
+
+/* DARK MODE */
+
+body.dark{
+    --bg:#191622;
+    --card:#262130;
+    --text:#F3EFF9;
+    --muted:#AAA2B8;
+    --lavender:#403654;
+}
+
+body.dark .bottom-nav{
+    background:rgba(38,33,48,.97);
+}
+
+body.dark .ai-box{
+    background:#262130;
+}
+
+body.dark .achievement{
+    background:#211D2C;
+}
+
+body.dark .input{
+    color:white;
+}
+
+@media(min-width:700px){
+    body{
+        padding:20px;
+    }
+
+    .app{
+        border-radius:30px;
+        overflow:hidden;
+        box-shadow:0 10px 50px rgba(0,0,0,.12);
+    }
+}
+</style>
+
+<!-- PWA Metadata -->
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="StudyMood">
+
+</head>
+
+<body>
+
+<div class="app">
+
+<header class="header">
+    <div class="header-row">
+        <div>
+            <div class="logo">Study<span>Mood</span> ✦</div>
+            <div class="date" id="date"></div>
+        </div>
+
+        <button class="theme-btn" onclick="toggleDark()">🌙</button>
+    </div>
+</header>
+
+
+<!-- ================= INICIO ================= -->
+
+<section class="screen active" id="home">
+
+<h1 id="greeting">¡Hola! 👋</h1>
+
+<p class="subtitle">
+    Este es tu espacio para estudiar a tu ritmo.
+</p>
+
+<div class="card gradient-card">
+
+<div class="mood-title">
+    ¿Cómo te sientes hoy?
+</div>
+
+<div class="moods">
+
+<button class="mood" onclick="mood('😫','Agotada',this)">
+😫<small>Agotada</small>
+</button>
+
+<button class="mood" onclick="mood('😔','Triste',this)">
+😔<small>Triste</small>
+</button>
+
+<button class="mood" onclick="mood('😐','Normal',this)">
+😐<small>Normal</small>
+</button>
+
+<button class="mood" onclick="mood('🙂','Bien',this)">
+🙂<small>Bien</small>
+</button>
+
+<button class="mood" onclick="mood('🤩','Motivada',this)">
+🤩<small>Motivada</small>
+</button>
+
+</div>
+
+<div class="ai-box" id="aiBox">
+    <div class="ai-title">🤖 StudyMood recomienda</div>
+    <div id="aiText"></div>
+</div>
+
+</div>
+
+
+<div class="card">
+
+<div class="progress-head">
+
+<div>
+<h2>Progreso de hoy</h2>
+<p class="subtitle" style="margin:0">
+    Cada pequeño avance cuenta 💜
+</p>
+</div>
+
+<div class="percent" id="percent">0%</div>
+
+</div>
+
+<div class="progress-track">
+<div class="progress-fill" id="fill"></div>
+</div>
+
+</div>
+
+
+<div class="card">
+
+<h2>Acciones rápidas</h2>
+
+<div class="quick-grid">
+
+<button class="quick" onclick="go('tasks')">
+<span class="quick-icon">📚</span>
+<strong>Mis tareas</strong>
+<br>
+<small>Organiza tu día</small>
+</button>
+
+<button class="quick" onclick="go('focus')">
+<span class="quick-icon">⏱️</span>
+<strong>Concentrarme</strong>
+<br>
+<small>Inicia una sesión</small>
+</button>
+
+<button class="quick" onclick="go('planner')">
+<span class="quick-icon">🧠</span>
+<strong>Plan inteligente</strong>
+<br>
+<small>Organiza una materia</small>
+</button>
+
+<button class="quick" onclick="go('calendar')">
+<span class="quick-icon">📅</span>
+<strong>Calendario</strong>
+<br>
+<small>Revisa tus fechas</small>
+</button>
+
+</div>
+
+</div>
+
+
+<div class="card" style="text-align:center">
+
+<div style="font-size:30px">🌷</div>
+
+<p id="quote" style="font-weight:700;line-height:1.5;margin-top:8px">
+"No tienes que hacerlo perfecto. Solo tienes que comenzar."
+</p>
+
+</div>
+
+</section>
+
+
+<!-- ================= TAREAS ================= -->
+
+<section class="screen" id="tasks">
+
+<h1>Mis tareas 📚</h1>
+
+<p class="subtitle">
+    Organiza tus pendientes y marca tus avances.
+</p>
+
+<div class="add-row">
+
+<input
+class="input"
+id="taskInput"
+placeholder="Ej. Estudiar para el examen..."
+onkeydown="enterTask(event)"
+>
+
+<button class="add" onclick="addTask()">+</button>
+
+</div>
+
+<div id="taskList"></div>
+
+</section>
+
+
+<!-- ================= PLANIFICADOR ================= -->
+
+<section class="screen" id="planner">
+
+<h1>Plan inteligente 🧠</h1>
+
+<p class="subtitle">
+    Escribe lo que necesitas estudiar y StudyMood
+    te ayudará a dividirlo en pasos.
+</p>
+
+<div class="card">
+
+<div class="plan-input">
+
+<input
+class="input"
+id="subject"
+placeholder="¿Qué necesitas estudiar?"
+>
+
+<textarea
+class="input"
+id="topic"
+placeholder="Ej. Examen de psicología educativa sobre orientación educativa..."
+></textarea>
+
+<button class="primary" onclick="createPlan()">
+✨ Crear plan de estudio
+</button>
+
+</div>
+
+</div>
+
+<div id="planResult"></div>
+
+</section>
+
+
+<!-- ================= ENFOQUE ================= -->
+
+<section class="screen" id="focus">
+
+<h1>Modo concentración ⏱️</h1>
+
+<p class="subtitle">
+    Una sesión a la vez. Sin presionarte.
+</p>
+
+<div class="card timer-card">
+
+<div class="timer-mode" id="timerMode">
+    Sesión de concentración
+</div>
+
+<div class="timer-circle">
+
+<div class="timer-time" id="timer">
+25:00
+</div>
+
+</div>
+
+<div class="timer-buttons">
+
+<button class="timer-start" id="timerBtn" onclick="startTimer()">
+▶ Comenzar
+</button>
+
+<button class="timer-reset" onclick="resetTimer()">
+↻
+</button>
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>💡 Consejo</h2>
+
+<p class="subtitle" style="margin:0">
+Durante tu sesión intenta concentrarte en una sola tarea.
+Cuando termine, toma un descanso antes de continuar.
+</p>
+
+</div>
+
+</section>
+
+
+<!-- ================= PROGRESO ================= -->
+
+<section class="screen" id="progress">
+
+<h1>Mi progreso 📈</h1>
+
+<p class="subtitle">
+    Mira todo lo que has conseguido.
+</p>
+
+<div class="stats">
+
+<div class="stat">
+<div class="stat-number" id="completed">0</div>
+<div class="stat-label">Tareas completadas</div>
+</div>
+
+<div class="stat">
+<div class="stat-number" id="sessions">0</div>
+<div class="stat-label">Sesiones de enfoque</div>
+</div>
+
+<div class="stat">
+<div class="stat-number" id="moods">0</div>
+<div class="stat-label">Check-ins</div>
+</div>
+
+<div class="stat">
+<div class="stat-number" id="streak">0</div>
+<div class="stat-label">Días de actividad</div>
+</div>
+
+</div>
+
+
+<div class="card" style="margin-top:15px">
+
+<h2>🏆 Logros</h2>
+
+<div class="achievement">
+<div class="badge">🌱</div>
+<div>
+<strong>Primer paso</strong>
+<small>Completaste tu primera tarea.</small>
+</div>
+</div>
+
+<div class="achievement">
+<div class="badge">📚</div>
+<div>
+<strong>En modo estudiante</strong>
+<small>Completa 5 tareas.</small>
+</div>
+</div>
+
+<div class="achievement">
+<div class="badge">🔥</div>
+<div>
+<strong>Constancia</strong>
+<small>Realiza 3 sesiones de enfoque.</small>
+</div>
+</div>
+
+</div>
+
+</section>
+
+
+<!-- ================= CALENDARIO ================= -->
+
+<section class="screen" id="calendar">
+
+<h1>Calendario 📅</h1>
+
+<p class="subtitle">
+    Una vista rápida de tus días.
+</p>
+
+<div class="card">
+
+<div class="calendar-head">
+<button onclick="changeMonth(-1)">‹</button>
+<div class="calendar-title" id="monthTitle"></div>
+<button onclick="changeMonth(1)">›</button>
+</div>
+
+<div class="calendar-grid" id="calendarGrid"></div>
+
+</div>
+
+<div class="card">
+
+<h2>📝 Próximamente</h2>
+
+<p class="subtitle" style="margin:0">
+Aquí podrás agregar exámenes, entregas y fechas importantes.
+</p>
+
+</div>
+
+</section>
+
+
+<!-- ================= PERFIL ================= -->
+
+<section class="screen" id="profile">
+
+<h1>Mi perfil 👤</h1>
+
+<p class="subtitle">
+    Personaliza tu espacio de estudio.
+</p>
+
+<div class="card profile-card">
+
+<div class="avatar">🎓</div>
+
+<div class="profile-name" id="profileName">
+Estudiante
+</div>
+
+<div class="profile-input">
+
+<input
+class="input"
+id="nameInput"
+placeholder="Escribe tu nombre"
+>
+
+<button class="save" onclick="saveName()">
+Guardar
+</button>
+
+</div>
+
+</div>
+
+
+<div class="card">
+
+<h2>🎯 Mi objetivo</h2>
+
+<input
+class="input"
+id="goalInput"
+placeholder="Ej. Aprobar todas mis materias"
+>
+
+<button
+class="primary"
+style="margin-top:10px"
+onclick="saveGoal()"
+>
+Guardar objetivo
+</button>
+
+</div>
+
+</section>
+
+
+<!-- ================= NAVEGACIÓN ================= -->
+
+<nav class="bottom-nav">
+
+<button class="nav active" onclick="go('home',this)">
+<span class="nav-icon">🏠</span>
+Inicio
+</button>
+
+<button class="nav" onclick="go('tasks',this)">
+<span class="nav-icon">📚</span>
+Tareas
+</button>
+
+<button class="nav" onclick="go('focus',this)">
+<span class="nav-icon">⏱️</span>
+Enfoque
+</button>
+
+<button class="nav" onclick="go('progress',this)">
+<span class="nav-icon">📈</span>
+Progreso
+</button>
+
+<button class="nav" onclick="go('profile',this)">
+<span class="nav-icon">👤</span>
+Perfil
+</button>
+
+</nav>
+
+</div>
+
+
+<script>
+
+/* ==========================
+   DATOS
+========================== */
+
+let tasks =
+JSON.parse(localStorage.getItem("sm_tasks")) || [];
+
+let sessions =
+Number(localStorage.getItem("sm_sessions")) || 0;
+
+let moodCount =
+Number(localStorage.getItem("sm_moods")) || 0;
+
+let name =
+localStorage.getItem("sm_name") || "Estudiante";
+
+let goal =
+localStorage.getItem("sm_goal") || "";
+
+
+/* ==========================
+   FECHA
+========================== */
+
+const now = new Date();
+
+document.getElementById("date").textContent =
+now.toLocaleDateString("es-MX",{
+weekday:"long",
+day:"numeric",
+month:"long"
+});
+
+function greeting(){
+
+let hour = new Date().getHours();
+
+let text =
+hour < 12 ? "¡Buenos días" :
+hour < 19 ? "¡Buenas tardes" :
+"¡Buenas noches";
+
+document.getElementById("greeting").textContent =
+text + ", " + name + "! 👋";
+
+}
+
+
+/* ==========================
+   NAVEGACIÓN
+========================== */
+
+function go(screen,button){
+
+document.querySelectorAll(".screen")
+.forEach(x=>x.classList.remove("active"));
+
+document.getElementById(screen)
+.classList.add("active");
+
+if(button){
+
+document.querySelectorAll(".nav")
+.forEach(x=>x.classList.remove("active"));
+
+button.classList.add("active");
+
+}
+
+if(screen==="calendar"){
+renderCalendar();
+}
+
+updateAll();
+
+window.scrollTo(0,0);
+
+}
+
+
+/* ==========================
+   MOOD / IA LOCAL
+========================== */
+
+function mood(emoji,type,button){
+
+document.querySelectorAll(".mood")
+.forEach(x=>x.classList.remove("selected"));
+
+button.classList.add("selected");
+
+let advice="";
+
+if(type==="Agotada"){
+
+advice =
+"Hoy conviene bajar el ritmo. Empieza con una tarea pequeña durante 15 minutos y después toma un descanso. Tu descanso también es importante.";
+
+}
+
+if(type==="Triste"){
+
+advice =
+"No necesitas sentirte al 100% para avanzar. Elige una tarea sencilla, estudia un poco y reconoce ese pequeño logro.";
+
+}
+
+if(type==="Normal"){
+
+advice =
+"Puedes comenzar con una sesión de 25 minutos. Elige una sola tarea y evita intentar hacerlo todo al mismo tiempo.";
+
+}
+
+if(type==="Bien"){
+
+advice =
+"Tu energía parece adecuada para avanzar. Empieza por la tarea más importante y utiliza el temporizador para mantener el enfoque.";
+
+}
+
+if(type==="Motivada"){
+
+advice =
+"¡Aprovecha esa motivación! Puedes trabajar en una tarea importante, pero recuerda hacer pausas para mantener un buen ritmo.";
+
+}
+
+document.getElementById("aiText").textContent =
+emoji + " " + advice;
+
+document.getElementById("aiBox")
+.classList.add("show");
+
+moodCount++;
+
+localStorage.setItem("sm_moods",moodCount);
+
+}
+
+
+/* ==========================
+   TAREAS
+========================== */
+
+function addTask(){
+
+let input =
+document.getElementById("taskInput");
+
+let text =
+input.value.trim();
+
+if(!text)return;
+
+tasks.push({
+id:Date.now(),
+text:text,
+done:false
+});
+
+input.value="";
+
+saveTasks();
+renderTasks();
+updateAll();
+
+}
+
+function enterTask(e){
+
+if(e.key==="Enter"){
+addTask();
+}
+
+}
+
+function saveTasks(){
+
+localStorage.setItem(
+"sm_tasks",
+JSON.stringify(tasks)
+);
+
+}
+
+function toggleTask(id){
+
+tasks=tasks.map(t=>{
+
+if(t.id===id){
+
+return{
+...t,
+done:!t.done
+};
+
+}
+
+return t;
+
+});
+
+saveTasks();
+renderTasks();
+updateAll();
+
+}
+
+function deleteTask(id){
+
+tasks=tasks.filter(t=>t.id!==id);
+
+saveTasks();
+renderTasks();
+updateAll();
+
+}
+
+function renderTasks(){
+
+const list =
+document.getElementById("taskList");
+
+list.innerHTML="";
+
+if(tasks.length===0){
+
+list.innerHTML=`
+<div class="card" style="text-align:center">
+<div style="font-size:35px">📖</div>
+<br>
+<p>No tienes tareas todavía.</p>
+<br>
+<small style="color:var(--muted)">
+Agrega una tarea para comenzar.
+</small>
+</div>
+`;
+
+return;
+
+}
+
+tasks.forEach(t=>{
+
+let div =
+document.createElement("div");
+
+div.className =
+"task " + (t.done ? "done":"");
+
+div.innerHTML=`
+
+<button
+class="check"
+onclick="toggleTask(${t.id})"
+>
+${t.done ? "✓":""}
+</button>
+
+<div class="task-text">
+${escapeHTML(t.text)}
+</div>
+
+<button
+class="delete"
+onclick="deleteTask(${t.id})"
+>
+🗑
+</button>
+
+`;
+
+list.appendChild(div);
+
+});
+
+}
+
+function escapeHTML(text){
+
+let d=document.createElement("div");
+
+d.textContent=text;
+
+return d.innerHTML;
+
+}
+
+
+/* ==========================
+   PLAN INTELIGENTE
+========================== */
+
+function createPlan(){
+
+let subject =
+document.getElementById("subject").value.trim();
+
+let topic =
+document.getElementById("topic").value.trim();
+
+if(!subject || !topic){
+
+alert("Escribe la materia y lo que necesitas estudiar.");
+
+return;
+
+}
+
+let result =
+document.getElementById("planResult");
+
+result.innerHTML=`
+
+<div class="card">
+
+<h2>✨ Tu plan de estudio</h2>
+
+<div class="achievement">
+<div class="badge">1️⃣</div>
+<div>
+<strong>Comprender</strong>
+<small>Lee el tema y escribe con tus propias palabras qué significa.</small>
+</div>
+</div>
+
+<div class="achievement">
+<div class="badge">2️⃣</div>
+<div>
+<strong>Organizar</strong>
+<small>Divide ${escapeHTML(topic)} en conceptos pequeños.</small>
+</div>
+</div>
+
+<div class="achievement">
+<div class="badge">3️⃣</div>
+<div>
+<strong>Practicar</strong>
+<small>Crea preguntas y trata de responderlas sin mirar tus apuntes.</small>
+</div>
+</div>
+
+<div class="achievement">
+<div class="badge">4️⃣</div>
+<div>
+<strong>Repasar</strong>
+<small>Haz un repaso breve y detecta qué parte necesitas estudiar nuevamente.</small>
+</div>
+</div>
+
+<button
+class="primary"
+onclick="addPlannedTask()"
+>
+＋ Agregar a mis tareas
+</button>
+
+</div>
+
+`;
+
+window.scrollTo({
+top:document.body.scrollHeight,
+behavior:"smooth"
+});
+
+window.plannedTask =
+"Estudiar " + subject + ": " + topic;
+
+}
+
+function addPlannedTask(){
+
+if(!window.plannedTask)return;
+
+tasks.push({
+id:Date.now(),
+text:window.plannedTask,
+done:false
+});
+
+saveTasks();
+renderTasks();
+updateAll();
+
+alert("✨ Plan agregado a tus tareas.");
+
+}
+
+
+/* ==========================
+   POMODORO
+========================== */
+
+let seconds=1500;
+
+let timerInterval=null;
+
+let running=false;
+
+function updateTimer(){
+
+let min =
+Math.floor(seconds/60);
+
+let sec =
+seconds%60;
+
+document.getElementById("timer")
+.textContent =
+String(min).padStart(2,"0")
++
+":"
++
+String(sec).padStart(2,"0");
+
+}
+
+function startTimer(){
+
+if(running)return;
+
+running=true;
+
+document.getElementById("timerBtn")
+.textContent="⏸ En curso";
+
+timerInterval=setInterval(()=>{
+
+if(seconds>0){
+
+seconds--;
+
+updateTimer();
+
+}else{
+
+clearInterval(timerInterval);
+
+running=false;
+
+sessions++;
+
+localStorage.setItem(
+"sm_sessions",
+sessions
+);
+
+document.getElementById("timerBtn")
+.textContent="▶ Comenzar";
+
+alert(
+"🎉 ¡Sesión completada! Tómate un descanso."
+);
+
+updateAll();
+
+}
+
+},1000);
+
+}
+
+function resetTimer(){
+
+clearInterval(timerInterval);
+
+running=false;
+
+seconds=1500;
+
+updateTimer();
+
+document.getElementById("timerBtn")
+.textContent="▶ Comenzar";
+
+}
+
+
+/* ==========================
+   PROGRESO
+========================== */
+
+function updateAll(){
+
+let total=tasks.length;
+
+let done=
+tasks.filter(t=>t.done).length;
+
+let percent=
+total===0 ? 0 :
+Math.round(done/total*100);
+
+document.getElementById("percent")
+.textContent=percent+"%";
+
+document.getElementById("fill")
+.style.width=percent+"%";
+
+document.getElementById("completed")
+.textContent=done;
+
+document.getElementById("sessions")
+.textContent=sessions;
+
+document.getElementById("moods")
+.textContent=moodCount;
+
+document.getElementById("streak")
+.textContent=
+done>0 ? 1 : 0;
+
+}
+
+renderTasks();
+updateTimer();
+updateAll();
+greeting();
+
+
+/* ==========================
+   PERFIL
+========================== */
+
+function saveName(){
+
+let input =
+document.getElementById("nameInput");
+
+let value =
+input.value.trim();
+
+if(!value)return;
+
+name=value;
+
+localStorage.setItem(
+"sm_name",
+name
+);
+
+document.getElementById("profileName")
+.textContent=name;
+
+greeting();
+
+input.value="";
+
+}
+
+function saveGoal(){
+
+let input =
+document.getElementById("goalInput");
+
+goal=input.value.trim();
+
+localStorage.setItem(
+"sm_goal",
+goal
+);
+
+alert("🎯 Objetivo guardado.");
+
+}
+
+document.getElementById("profileName")
+.textContent=name;
+
+document.getElementById("goalInput")
+.value=goal;
+
+
+/* ==========================
+   MODO OSCURO
+========================== */
+
+function toggleDark(){
+
+document.body.classList.toggle("dark");
+
+localStorage.setItem(
+"sm_dark",
+document.body.classList.contains("dark")
+);
+
+}
+
+if(localStorage.getItem("sm_dark")==="true"){
+
+document.body.classList.add("dark");
+
+}
+
+
+/* ==========================
+   FRASES
+========================== */
+
+const quotes=[
+
+"No tienes que hacerlo perfecto. Solo tienes que comenzar.",
+
+"Cada pequeño avance también es progreso.",
+
+"Tu esfuerzo de hoy construye tu futuro.",
+
+"Aprender lleva tiempo. Sé paciente contigo.",
+
+"Una tarea a la vez. Un día a la vez.",
+
+"Descansar también forma parte de estudiar."
+
+];
+
+document.getElementById("quote")
+.textContent=
+'"'+quotes[Math.floor(Math.random()*quotes.length)]+'"';
+
+
+/* ==========================
+   CALENDARIO
+========================== */
+
+let calendarDate=new Date();
+
+function changeMonth(amount){
+
+calendarDate.setMonth(
+calendarDate.getMonth()+amount
+);
+
+renderCalendar();
+
+}
+
+function renderCalendar(){
+
+let year=calendarDate.getFullYear();
+
+let month=calendarDate.getMonth();
+
+let firstDay=
+new Date(year,month,1).getDay();
+
+let days=
+new Date(year,month+1,0).getDate();
+
+let months=[
+
+"Enero","Febrero","Marzo","Abril",
+"Mayo","Junio","Julio","Agosto",
+"Septiembre","Octubre","Noviembre","Diciembre"
+
+];
+
+document.getElementById("monthTitle")
+.textContent=
+months[month]+" "+year;
+
+let grid=
+document.getElementById("calendarGrid");
+
+grid.innerHTML="";
+
+["D","L","M","M","J","V","S"]
+.forEach(d=>{
+
+let el=document.createElement("div");
+
+el.className="day-name";
+
+el.textContent=d;
+
+grid.appendChild(el);
+
+});
+
+for(let i=0;i<firstDay;i++){
+
+let empty=document.createElement("div");
+
+grid.appendChild(empty);
+
+}
+
+for(let d=1;d<=days;d++){
+
+let el=document.createElement("div");
+
+el.className="day";
+
+el.textContent=d;
+
+let today=new Date();
+
+if(
+d===today.getDate() &&
+month===today.getMonth() &&
+year===today.getFullYear()
+){
+
+el.classList.add("today");
+
+}
+
+grid.appendChild(el);
+
+}
+
+}
+
+renderCalendar();
+
+</script>
+
+
+<!-- Registrar Service Worker para PWA -->
+<script src="script.js"></script>
+
+</body>
+</html>
